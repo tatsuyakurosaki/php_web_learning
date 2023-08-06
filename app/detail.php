@@ -32,40 +32,14 @@ try {
         header("Location: error.php");
         exit();
     }
-    // $ps = $pdo->prepare($sql);
-    // $ps->bindParam(":id", $course_id, PDO::PARAM_INT);
-    // $ps->execute();
-    // $course = $ps->fetch();
-    // if ($course === false) {
-    //     error_log("Invalid course_id. -> {$course_id}");
-    //     header("Location: error.php");
-    //     exit();
-    // }
-
-    // $sql = "select 
-    //                 se.id, 
-    //                 se.title, 
-    //                 se.no, 
-    //                 se.url, 
-    //                 se.course_id
-    //             from 
-    //                 sections se
-    //             where 
-    //                 se.course_id = :course_id
-    //             order by 
-    //                 se.no";
-
-    // $ps = $pdo->prepare($sql);
-    // $ps->bindParam(":course_id", $course_id, PDO::PARAM_INT);
-    // $ps->execute();
-    // $sections = $ps->fetchAll();
-    // if (count($sections) === 0) {
-    //     error_log("Invalid sections. -> {$course_id}");
-    //     header("Location: error.php");
-    //     exit();
-    // }
+    
     $section_dao = new SectionDAO($pdo);
-    $sections = $section_dao->selectByCourseId($course_id);
+    $account_id = get_account_id();
+    if ($account_id !== false){
+        $sections = $section_dao->selectByCourseIdAndAccountId($course_id, $account_id);
+    } else {
+        $sections = $section_dao->selectByCourseId($course_id);
+    }
     if (count($sections) === 0) {
         error_log("Invalid sections. -> {$course_id}");
         header("Location: error.php");
@@ -80,10 +54,13 @@ try {
         }
     }
 
+    if (is_sign_in()) {
+        $csrf_token = generate_csrf_token();
+    }
+
     require("../views/detail_view.php");
 
 } catch (PDOException $e) {
     error_log($e->getMessage());
     header("Location: error.php");
-    // exit();
 }
