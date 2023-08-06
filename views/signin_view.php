@@ -12,7 +12,7 @@
                 <h3>Sign in</h3>
                 <hr>
                 <form action="signin_post.php" method="post">
-                    <input type="hidden" name="csrf_token" value="<?php h($csrf_token); ?>" />
+                    <input type="hidden" name="csrf_token" value="<?= h($csrf_token); ?>">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" class="form-control" id="name" name="name">
