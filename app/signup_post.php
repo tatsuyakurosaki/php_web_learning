@@ -45,7 +45,7 @@ try {
     
     header("Location: signin.php");
 
-} catch (Exception $e) {
+} catch (PDOException $e) {
     if ($e->getCode() == 23000) {
         set_message(MESSAGE_SIGNUP_ERROR_NOT_AVAILABLE_NAME);
         header("Location: signup.php");

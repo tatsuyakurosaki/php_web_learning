@@ -5,6 +5,7 @@ require_once('../libs/AccountDAO.php');
 $csrf_token = filter_input(INPUT_POST, "csrf_token");
 if (validate_csrf_token($csrf_token) === false) {
     error_log("Invalid CSRF token: {$csrf_token}");
+    set_message("CSRF token is invalid : {$csrf_token}");
     header("Location: error.php");
     exit();
 }
@@ -61,5 +62,6 @@ try {
 
 } catch (PDOException $e) {
     error_log($e->getMessage());
+    set_message("PDOException Error : {$e->getMessage()}");
     header("Location: error.php");
 }
